@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 ///replace your desired colors with relevant color code and use them globally in app
 class NewsAppColors {
+  static final lightBlue50 = Colors.lightBlue[50]!;
   static final  accentColor = Colors.blue[800];
   static const colorWhite = Color(0xFFFFFFFF);
   static final colorBlue = Colors.blue.shade50;

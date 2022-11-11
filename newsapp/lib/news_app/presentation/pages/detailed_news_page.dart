@@ -1,12 +1,20 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapp/core/theme/news_app_colors.dart';
 import 'package:newsapp/core/theme/text_styles.dart';
+import 'package:newsapp/news_app/presentation/cubit/homepage_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../data/models/articles_model.dart';
 
 class DetailedNewsPage extends StatelessWidget {
-  const DetailedNewsPage({Key? key}) : super(key: key);
-
+   DetailedNewsPage({Key? key,
+     required this.articles
+   }) : super(key: key);
+   Articles articles ;
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,12 +26,12 @@ class DetailedNewsPage extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/HB.jpeg',),fit: BoxFit.cover,
+                image: NetworkImage(articles.urlToImage??'https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM='),fit: BoxFit.fitHeight,
               )
             ),
             child: Column(
               //mainAxisSize: MainAxisSize.max,
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(25.0),
@@ -59,15 +67,13 @@ class DetailedNewsPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height*0.2,),
+                SizedBox(height: MediaQuery.of(context).size.height*0.12,),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text('Him,nskkl skhak skkxvdvd '
-                      'sbdjkabskbdjkbask '
-                      'News Title',
+                  padding: const EdgeInsets.only(left: 10.0,right: 10.0,bottom: 60.0),
+                  child: Text(articles.title??'Title',
                     overflow:TextOverflow.ellipsis,
-                    maxLines:4,
-                    style: AppTextStyles.detailedPageNewsTitle,),
+                    maxLines:12,textAlign: TextAlign.justify,
+                    style: AppTextStyles.detailedPageNewsTitle.copyWith(fontSize: 24,backgroundColor: Colors.black45),),
                 ),
               ],
             ),
@@ -84,39 +90,46 @@ class DetailedNewsPage extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.53,
                 width: double.infinity,
                 child: ColoredBox(
-                  color: NewsAppColors.colorWhite,
+                  color: NewsAppColors.lightBlue50,
                   child: SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
+
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text('Author:::::::::::',
-                                    style: TextStyle(fontSize: 16,)),
-                                SizedBox(width: 30.0,),
-                                Text('Published at:::::::::',textAlign: TextAlign.justify,style: TextStyle(fontSize: 16,))
-                              ],
+                            child: Align(alignment: Alignment.topRight,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(articles.author??'Unknown Author',
+                                      style: TextStyle(fontSize: 16,)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.all(2.0),
+                                        child: Icon(Icons.calendar_month),
+                                      ),
+                                      Text(articles.publishedAt!.substring(0,10),textAlign: TextAlign.justify,style: TextStyle(fontSize: 16,)),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                          Text('News Description :::::::::::::::::::::::::::::::::::::::::::',
+                          Text(articles.description??'Unknown',
                             style: AppTextStyles.newsDescription,),
-                          SizedBox(height: 10.0,),
-                          Text('See your content is fit or not.News Content\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\n'
-                              'ahsvxhja\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\n'
-                              'sbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\ns'
-                              'bcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\ns'
-                              'bcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj\nsbcjsbkc'
-                              '\nahsvxhjagsj\nsbcjsbkc\nahsvxhjagsj',textAlign: TextAlign.justify,style: AppTextStyles.newsDescription.copyWith(fontWeight: FontWeight.normal),)
+                          const SizedBox(height: 10.0,),
+                          Text(articles.content??'No content available',textAlign: TextAlign.justify,
+                            style: AppTextStyles.newsDescription.copyWith(fontWeight: FontWeight.normal),),
+                          TextButton(
+                            onPressed: () async {
+                              BlocProvider.of<HomepageCubit>(context).launchURL(articles.url);
+                            },
+                            child:  Text('Go to source '),
+                          ),
                         ],
                       ),
                     ),

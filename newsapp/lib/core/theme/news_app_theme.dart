@@ -10,7 +10,7 @@ class NewsAppTheme {
   static ThemeData lightTheme = ThemeData(
       indicatorColor: Colors.blue[800],
     //cardColor: Colors.green[100],
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.deepPurple.shade200,
       appBarTheme: const AppBarTheme(
         color: NewsAppColors.customLightBlue,
         elevation: 1,

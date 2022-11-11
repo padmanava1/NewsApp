@@ -15,14 +15,14 @@ class AppTextStyles {
   );
 
   static const homepageNewsAuthor = TextStyle(
-      fontSize: 18,
+      fontSize: 14,
       color: Colors.white70
   );
 
-  static final detailedPageNewsTitle = TextStyle(
+  static const detailedPageNewsTitle = TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      color: Colors.white.withOpacity(0.8));
+      color: Colors.white);
 
   static const newsDescription = TextStyle(fontSize: 24,fontWeight: FontWeight.bold);
 
@@ -34,7 +34,7 @@ class AppTextStyles {
 
   static const unselectedLabelStyle = TextStyle(
     color: Colors.black87,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
     fontSize: 20,
   );
 

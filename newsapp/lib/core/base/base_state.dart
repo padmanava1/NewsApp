@@ -1,6 +1,7 @@
 
 
 import 'package:equatable/equatable.dart';
+import 'package:newsapp/news_app/presentation/cubit/homepage_cubit.dart';
 
 abstract class BaseState extends Equatable {}
 
@@ -95,7 +96,6 @@ class StateOnSuccess<T> extends BaseState {
    StateOnSuccess copyWith({ T? response, bool? flag}){
      return StateOnSuccess(response:response??this.response, flag:flag??this.flag);
    }
-
 
 }
 
