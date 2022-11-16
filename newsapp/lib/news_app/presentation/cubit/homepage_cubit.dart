@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapp/core/base/base_state.dart';
 import 'package:newsapp/news_app/data/models/articles_model.dart';
 import 'package:newsapp/news_app/domain/usecases/get_news_by_categories_usecase.dart';
@@ -19,7 +19,7 @@ class HomepageCubit extends Cubit<BaseState> {
   String countryName = 'Select Country';
 
   var homepageStateData = HomepageState();
-
+  List<List<Articles>> allCategoriesList = [[],[],[],[],[],[],[]];
 
   getTopHeadlines({String? country}) async{
     country = defaultCountryCode;
@@ -40,7 +40,6 @@ class HomepageCubit extends Cubit<BaseState> {
     defaultCategory = categories.values[index].name;
 
     print("::::::::::::in Cubit ::$state");
-  //  if(state is StateOnSuccess<HomepageState>){
     emit(StateOnSuccess(response: homepageStateData));
 
     final success = state as StateOnSuccess<HomepageState>;
@@ -50,16 +49,24 @@ class HomepageCubit extends Cubit<BaseState> {
         emit(StateNoData());
       }, (r) {
         print('r in success of copyWith${r}');
+        if(allCategoriesList[index].isEmpty){
+          allCategoriesList[index] = r;
+          emit(success.copyWith(
+              response: success.response?.copyWith(
+                  newsByCategoriesList: allCategoriesList[index]
+              )
+          ));
+          print( 'api called!');
+        }
+        else{
+          emit(success.copyWith(
+              response: success.response?.copyWith(
+                  newsByCategoriesList: allCategoriesList[index]
+              )
+          ));
+        }
 
-        emit(success.copyWith(
-          response: success.response?.copyWith(
-            newsByCategoriesList: r
-          )
-        ));
       });
-  //  }else{
-   //   print("$state");
-  //  }
   }
 
   // void updateUi() {
@@ -71,12 +78,12 @@ class HomepageCubit extends Cubit<BaseState> {
   //   }
   // }
 
-  callCategoriesByTab(int index){
-      defaultCategory = categories.values[index].name;
-      print('state after method called :::: $state');
-      emit(StateOnSuccess(response: homepageStateData));
-      getNewsBycategories();
-  }
+  // callCategoriesByTab(int index){
+  //     defaultCategory = categories.values[index].name;
+  //     print('state after method called :::: $state');
+  //     emit(StateOnSuccess(response: homepageStateData));
+  //     getNewsBycategories();
+  // }
 
 
 

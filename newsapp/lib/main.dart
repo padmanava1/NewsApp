@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapp/news_app/presentation/cubit/homepage_cubit.dart';
+import 'package:newsapp/news_app/presentation/cubit/searchpage_cubit.dart';
 import 'package:newsapp/news_app/presentation/pages/homepage.dart';
 import 'injection_container.dart';
 import 'injection_container.dart' as di;
@@ -19,8 +20,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<HomepageCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl<HomepageCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => sl<SearchPageCubit>(),
+        ),
+      ],
       child: MaterialApp(
         title: 'News App',
         debugShowCheckedModeBanner: false,

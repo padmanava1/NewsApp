@@ -37,8 +37,19 @@ class TabViewListWidget extends StatelessWidget {
                 ),
                 Expanded(child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(newsByCategoryList[index].title??'News Title',style: AppTextStyles.unselectedLabelStyle,maxLines: 6,overflow: TextOverflow.ellipsis,),
-                ))
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(alignment:Alignment.bottomRight,child: Text(newsByCategoryList[index].publishedAt?.substring(0,10)??'Unknown date')),
+                      ),
+                      Text(newsByCategoryList[index].title??'News Title',style: AppTextStyles.unselectedLabelStyle,maxLines: 6,overflow: TextOverflow.ellipsis,),
+
+                    ],
+                  ),
+                )),
               ],
             ),
             ),

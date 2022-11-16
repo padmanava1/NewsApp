@@ -54,4 +54,24 @@ class NewsAppDataSourceImpl extends NewsAppDataSource {
       return Left(ServerFailure());
     }
   }
+
+  @override
+  Future<Either<Failures, List<Articles>>> getNewsByKeywords(String keyword) async{
+    try{
+      final res = await dio.get('https://newsapi.org/v2/everything',
+        queryParameters:{
+          "q":keyword,
+          "apiKey":AppConstants.apiKey4
+        },
+      );
+      var jsonData = res.data ;
+      final model=TopHeadlinesModel.fromJson(jsonData);
+      print(keyword);
+      return Right( model.articles ??[]);
+    }
+    catch(e){
+      print(e);
+      return Left(ServerFailure());
+    }
+  }
   }
