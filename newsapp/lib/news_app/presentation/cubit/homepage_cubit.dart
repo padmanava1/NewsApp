@@ -17,6 +17,9 @@ class HomepageCubit extends Cubit<BaseState> {
   String defaultCountryCode = 'in';
   //bool isCountrySelected = false;
   String countryName = 'Select Country';
+  bool isLoading = false;
+  bool isFetchedData = false;
+
 
   var homepageStateData = HomepageState();
   List<List<Articles>> allCategoriesList = [[],[],[],[],[],[],[]];
@@ -28,7 +31,9 @@ class HomepageCubit extends Cubit<BaseState> {
   response.fold(
           (l) {
             emit(StateNoData(msg: "Sorry some error occurred in Cubit level"));
+            isFetchedData = false;
           }, (r) {
+    isFetchedData = true;
     homepageStateData  = HomepageState(headlinesList:  r);
             emit(StateOnSuccess(response: HomepageState(headlinesList: r)));
             getNewsBycategories();

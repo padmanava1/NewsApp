@@ -4,7 +4,7 @@ import 'package:newsapp/core/base/base_state.dart';
 import '../../domain/usecases/get_news_by_keywords_usecase.dart';
 
 class SearchPageCubit extends Cubit<BaseState>{
-  GetNewsByKeywordsUsecase getNewsByKeywordsUsecase;
+  GetNewsByKeywordsUseCase getNewsByKeywordsUsecase;
   SearchPageCubit({required this.getNewsByKeywordsUsecase}) : super(StateInitial());
 
   emitInitialState(){

@@ -10,7 +10,7 @@ class NewsAppTheme {
   static ThemeData lightTheme = ThemeData(
       indicatorColor: Colors.blue[800],
     //cardColor: Colors.green[100],
-      backgroundColor: Colors.deepPurple.shade200,
+    //   backgroundColor: Colors.deepPurple.shade200,
       appBarTheme: const AppBarTheme(
         color: NewsAppColors.customLightBlue,
         elevation: 1,
@@ -22,7 +22,7 @@ class NewsAppTheme {
           color: Colors.white,
         ),
       ),
-      textTheme: TextTheme(headline4: AppTextStyles.homepageNewsTitle),
+      // textTheme: TextTheme(headline4: AppTextStyles.homepageNewsTitle),
       scaffoldBackgroundColor: Colors.white,
       // drawerTheme: DrawerThemeData(
       //   scrimColor: Colors.transparent,
@@ -57,7 +57,7 @@ class NewsAppTheme {
   static ThemeData darkTheme = ThemeData(
     indicatorColor: Colors.blue,
     cardColor: Colors.grey,
-      backgroundColor: Colors.grey,
+      // backgroundColor: Colors.grey,
       iconTheme: const IconThemeData(color: Colors.white),
       appBarTheme: const AppBarTheme(
         color: NewsAppColors.colorBlack,
@@ -72,7 +72,7 @@ class NewsAppTheme {
       ),
       dialogBackgroundColor: Colors.blueGrey[200],
       scaffoldBackgroundColor: Colors.black45,
-      textTheme: const TextTheme(headline4: AppTextStyles.infoContentStyle4),
+      // textTheme: const TextTheme(headline4: AppTextStyles.infoContentStyle4),
       drawerTheme: const DrawerThemeData(
         scrimColor: Colors.transparent,
         backgroundColor: Colors.black,

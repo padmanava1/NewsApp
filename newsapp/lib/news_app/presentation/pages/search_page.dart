@@ -142,14 +142,16 @@ class SearchPage extends StatelessWidget {
                               ],
                             ),
                           );
-                        } else {
+                        }
+                        else {
                           return SizedBox(
-                              height: MediaQuery.of(context).size.height,
+                              height: MediaQuery.of(context).size.height*0.9,
                               child: TabViewListWidget(
                                 newsByCategoryList: state.response,
                               ));
                         }
-                      } else if (state is StateInitial) {
+                      }
+                      else if (state is StateInitial) {
                         return SizedBox(
                           height: MediaQuery.of(context).size.height * 0.4,
                           child: Column(

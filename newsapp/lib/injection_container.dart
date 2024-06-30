@@ -21,7 +21,7 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => GetTopHeadlinesUsecase(sl()));
   sl.registerLazySingleton(() => GetNewsByCategoriesUsecase(sl()));
-  sl.registerLazySingleton(() => GetNewsByKeywordsUsecase(sl()));
+  sl.registerLazySingleton(() => GetNewsByKeywordsUseCase(sl()));
 
   sl.registerLazySingleton<NewsAppRepository>(
       () => NewsAppRepositoryImpl(newsAppDataSource: sl()));

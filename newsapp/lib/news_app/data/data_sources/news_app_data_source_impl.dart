@@ -9,6 +9,8 @@ import 'news_app_data_source.dart';
 
 class NewsAppDataSourceImpl extends NewsAppDataSource {
   final Dio dio;
+  List<String> apiKeys = [AppConstants.apiKey,AppConstants.apiKey2,AppConstants.apiKey3,AppConstants.apiKey4,AppConstants.apiKey5,AppConstants.apiKey6,AppConstants.apiKey7];
+  int keyIndex = 0;
 
   NewsAppDataSourceImpl({required this.dio});
 
@@ -19,17 +21,28 @@ class NewsAppDataSourceImpl extends NewsAppDataSource {
       final res = await dio.get('https://newsapi.org/v2/top-headlines',
       queryParameters:{
         "country":country,
-        "apiKey":AppConstants.apiKey3
+        "apiKey":apiKeys[keyIndex]
       },
       );
       var jsonData = res.data ;
       final model=TopHeadlinesModel.fromJson(jsonData);
       return Right( model.articles ??[]);
     }
-        catch(e){
-      print(e);
-      return Left(ServerFailure());
-        }
+    catch (e) {
+      if (keyIndex < 6) {
+        keyIndex = keyIndex + 1;
+      } else if (keyIndex == 6) {
+        keyIndex = keyIndex - 6;
+      }
+
+      try {
+        // Call the API again by recursively invoking the function
+        return await getTopHeadlines(country);
+      } catch (_) {
+        // If an error occurs during the recursive call, return ServerFailure
+        return Left(ServerFailure());
+      }
+    }
   }
 
   @override
@@ -40,7 +53,7 @@ class NewsAppDataSourceImpl extends NewsAppDataSource {
         queryParameters:{
           "category":category,
           "country":country,
-          "apiKey":AppConstants.apiKey3
+          "apiKey":apiKeys[keyIndex]
         },
       );
       var jsonData = res.data ;
@@ -50,6 +63,12 @@ class NewsAppDataSourceImpl extends NewsAppDataSource {
       return Right( model.articles ??[]);
     }
     catch(e){
+      if(keyIndex<5) {
+        keyIndex = keyIndex + 1;
+      }
+      else if(keyIndex == 5){
+        keyIndex = keyIndex-5;
+      }
       print(e);
       return Left(ServerFailure());
     }
@@ -61,7 +80,7 @@ class NewsAppDataSourceImpl extends NewsAppDataSource {
       final res = await dio.get('https://newsapi.org/v2/everything',
         queryParameters:{
           "q":keyword,
-          "apiKey":AppConstants.apiKey4
+          "apiKey":apiKeys[keyIndex]
         },
       );
       var jsonData = res.data ;
@@ -70,6 +89,12 @@ class NewsAppDataSourceImpl extends NewsAppDataSource {
       return Right( model.articles ??[]);
     }
     catch(e){
+      if(keyIndex<5) {
+        keyIndex = keyIndex + 1;
+      }
+      else if(keyIndex == 5){
+        keyIndex = keyIndex-5;
+      }
       print(e);
       return Left(ServerFailure());
     }

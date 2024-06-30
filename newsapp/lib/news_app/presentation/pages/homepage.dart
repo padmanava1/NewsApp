@@ -5,12 +5,12 @@ import 'package:newsapp/core/base/base_state.dart';
 import 'package:newsapp/core/theme/news_app_colors.dart';
 import 'package:newsapp/core/theme/text_styles.dart';
 import 'package:newsapp/news_app/presentation/cubit/homepage_cubit.dart';
+import 'package:newsapp/news_app/presentation/pages/error_page.dart';
 import 'package:newsapp/news_app/presentation/pages/search_page.dart';
 import 'package:newsapp/news_app/presentation/widgets/HeadlinesWidget.dart';
 import 'package:newsapp/utils/app_consts.dart';
 import 'package:newsapp/utils/enums/categories.dart';
 import 'package:newsapp/utils/enums/countries.dart';
-
 import '../../../injection_container.dart';
 import '../widgets/tab_view_widget.dart';
 
@@ -22,10 +22,16 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return BlocBuilder<HomepageCubit, BaseState>(
+    return  BlocListener<HomepageCubit, BaseState>(
+  listener: (context, state) {
+   if(state is StateNoData){
+     Navigator.of(context).push(MaterialPageRoute(builder: (context) => ErrorPage()));
+   }
+  },
+  child: BlocBuilder<HomepageCubit, BaseState>(
       bloc: BlocProvider.of<HomepageCubit>(context)..getTopHeadlines(),
       builder: (context, state) {
+        print(state);
         // var homepageCubit = BlocProvider.of<HomepageCubit>(context);
         if (state is StateOnSuccess) {
           HomepageState stateResponse = state.response as HomepageState;
@@ -34,11 +40,12 @@ class Homepage extends StatelessWidget {
             body: DefaultTabController(
               length: categories.values.length,
               child: Builder(builder: (BuildContext context) {
-               final  TabController? tabController = DefaultTabController.of(context);
+                final TabController? tabController =
+                DefaultTabController.of(context);
                 tabController?.addListener(() {
                   if (!tabController.indexIsChanging) {
-                    print("allcategoriesList is empty or not::::::::${homepageCubit.allCategoriesList[tabController.index]}");
-                    homepageCubit.getNewsBycategories(index: tabController.index);
+                    homepageCubit.getNewsBycategories(
+                        index: tabController.index);
                   }
                 });
                 return SafeArea(
@@ -52,7 +59,8 @@ class Homepage extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               right: 20.0, top: 20.0, left: 20.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -69,9 +77,10 @@ class Homepage extends StatelessWidget {
                                           favorite: ['in'],
                                           showSearch: true,
                                           onSelect: (Country country) {
-                                            homepageCubit.defaultCountryCode =
-                                                country.countryCode.toLowerCase();
-                                            //homepageCubit.isCountrySelected = true;
+                                            homepageCubit
+                                                .defaultCountryCode =
+                                                country.countryCode
+                                                    .toLowerCase();
                                             homepageCubit.countryName =
                                                 country.name;
                                             homepageCubit.getTopHeadlines();
@@ -83,18 +92,21 @@ class Homepage extends StatelessWidget {
                                           children: [
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(10.0),
+                                              BorderRadius.circular(
+                                                  10.0),
                                               child: SizedBox(
                                                 height: 40.0,
                                                 width: 40.0,
                                                 child: ColoredBox(
-                                                  color: NewsAppColors.colorBlue,
+                                                  color: NewsAppColors
+                                                      .colorBlue,
                                                 ),
                                               ),
                                             ),
                                             Icon(
                                               Icons.flag,
-                                              color: NewsAppColors.accentColor,
+                                              color:
+                                              NewsAppColors.accentColor,
                                             )
                                           ]),
                                     );
@@ -107,28 +119,33 @@ class Homepage extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>  SearchPage()));
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchPage()));
                                 },
-                                child:
-                                    Stack(alignment: Alignment.center, children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: SizedBox(
-                                      height: 40.0,
-                                      width: 40.0,
-                                      child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0)),
-                                          child: ColoredBox(
-                                            color: Colors.blue.shade50,
-                                          )),
-                                    ),
-                                  ),
-                                  Icon(Icons.search,
-                                      color: NewsAppColors.accentColor)
-                                ]),
+                                child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(10.0),
+                                        child: SizedBox(
+                                          height: 40.0,
+                                          width: 40.0,
+                                          child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      12.0)),
+                                              child: ColoredBox(
+                                                color: Colors.blue.shade50,
+                                              )),
+                                        ),
+                                      ),
+                                      Icon(Icons.search,
+                                          color: NewsAppColors.accentColor)
+                                    ]),
                               ),
                             ],
                           ),
@@ -154,17 +171,16 @@ class Homepage extends StatelessWidget {
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
                               physics: const BouncingScrollPhysics(),
-                              itemCount: stateResponse.headlinesList?.length,
-                              itemBuilder: (BuildContext context, int index) {
+                              itemCount:
+                              stateResponse.headlinesList?.length,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
                                 print(
                                     'List ::::: ${stateResponse.headlinesList?.length}');
 
                                 return HeadLinesWidget(
-                                  // title: stateResponse[index].title??'title',
-                                  // author: stateResponse[index].author??"Not Recognised",
-                                  // publishedAt: stateResponse[index].publishedAt??'No date',
-                                  // urlToImage: stateResponse[index].urlToImage!,
-                                  articles: stateResponse.headlinesList![index],
+                                  articles:
+                                  stateResponse.headlinesList![index],
                                 );
                               }),
                         ),
@@ -174,26 +190,20 @@ class Homepage extends StatelessWidget {
                         SizedBox(
                           height: 80.0,
                           child: TabBar(
-                            onTap: (int index) {
-                              //print('tapped ::::: ${stateResponse.headlinesList?.length}===== index:::::$index');
-                              // homepageCubit.defaultCategory =
-                              //     categories.values[index].name;
-                              //print(homepageCubit.defaultCategory);
-                              //homepageCubit.isUpdated = !homepageCubit.isUpdated;
-                              //homepageCubit.getNewsBycategories();
-                            },
                             isScrollable: true,
-                            indicatorPadding: EdgeInsets.only(left: 20.0),
+                            indicatorPadding:
+                            const EdgeInsets.only(left: 20.0),
                             indicatorColor: Colors.blue[800],
                             unselectedLabelColor: Colors.grey,
-                            tabs: List.generate(categories.values.toList().length,
-                                (index) {
+                            tabs: List.generate(
+                                categories.values.toList().length, (index) {
                               return Text(
-                                  categories.values[index].name[0].toUpperCase() +
+                                  categories.values[index].name[0]
+                                      .toUpperCase() +
                                       categories.values[index].name
                                           .substring(1)
                                           .toLowerCase(),
-                                  style: TextStyle(fontSize: 30));
+                                  style: const TextStyle(fontSize: 30));
                             }),
                           ),
                         ),
@@ -205,58 +215,170 @@ class Homepage extends StatelessWidget {
                               child: TabBarView(children: [
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                                 BlocBuilder<HomepageCubit, BaseState>(
                                   builder: (context, state) {
-                                    return TabViewListWidget(
-                                        newsByCategoryList:
-                                            stateResponse.newsByCategoriesList ??
-                                                []);
+                                    if (stateResponse
+                                        .newsByCategoriesList ==
+                                        null) {
+                                      homepageCubit.isLoading = true;
+                                    } else {
+                                      homepageCubit.isLoading = false;
+                                    }
+                                    return Stack(children: [
+                                      TabViewListWidget(
+                                          newsByCategoryList: stateResponse
+                                              .newsByCategoriesList ??
+                                              []),
+                                      Visibility(
+                                          visible: homepageCubit.isLoading,
+                                          child: const Center(
+                                              child:
+                                              CircularProgressIndicator(
+                                                strokeWidth: 5.0,
+                                              )))
+                                    ]);
                                   },
                                 ),
                               ]),
@@ -270,18 +392,19 @@ class Homepage extends StatelessWidget {
               }),
             ),
           );
-        } else if (state is StateInitial) {
-          return Scaffold(
+        }
+        else if (state is StateInitial) {
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),
           );
         } else {
-          return Scaffold(
-              body: Center(
-                  child: Text('Oops! some error occured while loading data!')));
+          return Scaffold(body:
+          Center(child: Text('Please change API Key and try again later!')));
         }
       },
-    );
+    ),
+);
   }
 }
