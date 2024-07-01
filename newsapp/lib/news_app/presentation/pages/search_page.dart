@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:input_history_text_field/input_history_text_field.dart';
 import 'package:newsapp/core/base/base_state.dart';
 import 'package:newsapp/core/theme/news_app_colors.dart';
 import 'package:newsapp/core/theme/text_styles.dart';
@@ -30,102 +29,102 @@ class SearchPage extends StatelessWidget {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: InputHistoryTextField(
-                        historyListItemLayoutBuilder: (controller, value, index) {
-                          return InkWell(
-                            onTap: () {
-                              controller.select(value.text);
-                              BlocProvider.of<SearchPageCubit>(context)
-                                  .getNewsByKeywords(searchedKeyword.text);
-                              FocusScope.of(context).unfocus();
-                            },
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                      margin: const EdgeInsets.only(left: 10.0),
-                                      padding: const EdgeInsets.only(left: 10.0),
-                                      child: Text(
-                                        value.textToSingleLine,
-                                        overflow: TextOverflow.ellipsis,
-                                        style:
-                                        const TextStyle(fontWeight: FontWeight.bold),
-                                      )),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.close,
-                                    size: 16,
-                                    color: Theme.of(context).disabledColor,
-                                  ),
-                                  onPressed: () {
-                                    controller.remove(value);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        onSubmitted: (String submittedText) {
-                          submittedText = searchedKeyword.text;
-                          BlocProvider.of<SearchPageCubit>(context)
-                              .getNewsByKeywords(submittedText);
-                          FocusScope.of(context).unfocus();
-                        },
-                        textEditingController: searchedKeyword,
-                        style: TextStyle(
-                          color: NewsAppColors.accentColor,
-                        ),
-                        historyKey: "01",
-                        listStyle: ListStyle.List,
-                        // onChanged:(String val){
-                        //   BlocProvider.of<SearchPageCubit>(context)
-                        //       .getNewsByKeywords(searchedKeyword.text);
-                        // } ,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all( 16.0),
-                          prefixIcon: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: NewsAppColors.accentColor,
-                              )),
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              //to call Cubit method
-                              BlocProvider.of<SearchPageCubit>(context)
-                                  .getNewsByKeywords(searchedKeyword.text);
-                              FocusScope.of(context).unfocus();
-                            },
-                            child: SizedBox(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: ColoredBox(
-                                    color: NewsAppColors.customLightBlue,
-                                    child: Icon(
-                                      Icons.search,
-                                      color: NewsAppColors.accentColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                          hintText: 'Search by keywords like anime',
-                        ),
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10.0),
+                  //   child: ClipRRect(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     child: InputHistoryTextField(
+                  //       historyListItemLayoutBuilder: (controller, value, index) {
+                  //         return InkWell(
+                  //           onTap: () {
+                  //             controller.select(value.text);
+                  //             BlocProvider.of<SearchPageCubit>(context)
+                  //                 .getNewsByKeywords(searchedKeyword.text);
+                  //             FocusScope.of(context).unfocus();
+                  //           },
+                  //           child: Row(
+                  //             children: [
+                  //               Expanded(
+                  //                 flex: 1,
+                  //                 child: Container(
+                  //                     margin: const EdgeInsets.only(left: 10.0),
+                  //                     padding: const EdgeInsets.only(left: 10.0),
+                  //                     child: Text(
+                  //                       value.textToSingleLine,
+                  //                       overflow: TextOverflow.ellipsis,
+                  //                       style:
+                  //                       const TextStyle(fontWeight: FontWeight.bold),
+                  //                     )),
+                  //               ),
+                  //               IconButton(
+                  //                 icon: Icon(
+                  //                   Icons.close,
+                  //                   size: 16,
+                  //                   color: Theme.of(context).disabledColor,
+                  //                 ),
+                  //                 onPressed: () {
+                  //                   controller.remove(value);
+                  //                 },
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         );
+                  //       },
+                  //       onSubmitted: (String submittedText) {
+                  //         submittedText = searchedKeyword.text;
+                  //         BlocProvider.of<SearchPageCubit>(context)
+                  //             .getNewsByKeywords(submittedText);
+                  //         FocusScope.of(context).unfocus();
+                  //       },
+                  //       textEditingController: searchedKeyword,
+                  //       style: TextStyle(
+                  //         color: NewsAppColors.accentColor,
+                  //       ),
+                  //       historyKey: "01",
+                  //       listStyle: ListStyle.List,
+                  //       // onChanged:(String val){
+                  //       //   BlocProvider.of<SearchPageCubit>(context)
+                  //       //       .getNewsByKeywords(searchedKeyword.text);
+                  //       // } ,
+                  //       decoration: InputDecoration(
+                  //         contentPadding: const EdgeInsets.all( 16.0),
+                  //         prefixIcon: GestureDetector(
+                  //             onTap: () {
+                  //               Navigator.of(context).pop();
+                  //             },
+                  //             child: Icon(
+                  //               Icons.arrow_back_ios,
+                  //               color: NewsAppColors.accentColor,
+                  //             )),
+                  //         suffixIcon: GestureDetector(
+                  //           onTap: () {
+                  //             //to call Cubit method
+                  //             BlocProvider.of<SearchPageCubit>(context)
+                  //                 .getNewsByKeywords(searchedKeyword.text);
+                  //             FocusScope.of(context).unfocus();
+                  //           },
+                  //           child: SizedBox(
+                  //             child: Padding(
+                  //               padding: const EdgeInsets.all(4.0),
+                  //               child: ClipRRect(
+                  //                 borderRadius: BorderRadius.circular(10),
+                  //                 child: ColoredBox(
+                  //                   color: NewsAppColors.customLightBlue,
+                  //                   child: Icon(
+                  //                     Icons.search,
+                  //                     color: NewsAppColors.accentColor,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  //         hintText: 'Search by keywords like anime',
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(
                     height: 5.0,
                   ),
